@@ -1,0 +1,34 @@
+{
+   "name": "scheduleit-server",
+   "version": "0.0.1",
+   "main": "src/index.js",
+   "author": "Thomas VAUCOIS <thomasvaucois@gmail.com>",
+   "license": "MIT",
+   "private": true,
+   "scripts": {
+      "dev": "nodemon",
+      "start": "ts-node src/index.ts",
+      "lint": "eslint .",
+      "lint:fix": "eslint . --fix",
+      "lint:format": "prettier --write \"./src/**/*.{ts,json}\""
+   },
+   "dependencies": {
+      "mysql": "^2.14.1",
+      "mysql2": "^2.2.5",
+      "reflect-metadata": "^0.1.10",
+      "typeorm": "0.2.29"
+   },
+   "devDependencies": {
+      "@types/node": "^8.0.29",
+      "@typescript-eslint/eslint-plugin": "^4.11.1",
+      "@typescript-eslint/parser": "^4.11.1",
+      "eslint": "^7.17.0",
+      "eslint-config-prettier": "^7.1.0",
+      "eslint-plugin-prettier": "^3.3.0",
+      "eslint-plugin-simple-import-sort": "^7.0.0",
+      "nodemon": "^2.0.6",
+      "prettier": "^2.2.1",
+      "ts-node": "3.3.0",
+      "typescript": "3.3.3333"
+   }
+}
