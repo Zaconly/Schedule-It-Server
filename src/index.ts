@@ -1,23 +1,27 @@
 import "reflect-metadata"
+import "dotenv/config"
 
+import { ApolloServer } from "apollo-server"
+import { buildSchema } from "type-graphql"
 import { createConnection } from "typeorm"
 
-import { User } from "./entity/User"
+import typeOrmConfig from "./config/typeorm"
+import { UserResolver } from "./resolvers/UserResolver"
 
-createConnection()
-  .then(async connection => {
-    console.log("Inserting a new user into the database...")
-    const user = new User()
-    user.firstName = "Timber"
-    user.lastName = "Saw"
-    user.age = 25
-    await connection.manager.save(user)
-    console.log("Saved a new user with id: " + user.id)
+const bootstrap = async () => {
+  try {
+    await createConnection(typeOrmConfig)
 
-    console.log("Loading users from the database...")
-    const users = await connection.manager.find(User)
-    console.log("Loaded users: ", users)
+    const schema = await buildSchema({
+      resolvers: [UserResolver]
+    })
+    const server = new ApolloServer({ schema })
 
-    console.log("Here you can setup and run express/koa/any other framework.")
-  })
-  .catch(error => console.log(error))
+    const { url } = await server.listen(process.env.PORT || 4000)
+    console.info(`🚀 Server is running, GraphQL Playground available at ${url}`)
+  } catch (err) {
+    console.error(err)
+  }
+}
+
+bootstrap()

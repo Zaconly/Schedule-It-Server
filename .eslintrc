@@ -9,10 +9,28 @@
   "env": {
     "node": true
   },
+  "parserOptions": {
+    "ecmaVersion": 2018,
+    "sourceType": "module"
+  },
+  "settings": {
+    "import/parser": {
+      "@typescript-eslint/parser": [".ts"]
+    }
+  },
   "rules": {
+    "prettier/prettier": "error",
+    "no-unused-vars": 0,
+    "@typescript-eslint/no-unused-vars": [
+      1,
+      {
+        "args": "all",
+        "ignoreRestSiblings": false,
+        "argsIgnorePattern": "^_|^args|^parent|^ctx|^info|^type|^target|^returns|^req|^res|^of"
+      }
+    ],
     "no-console": ["error", { "allow": ["info", "warn", "error"] }],
     "simple-import-sort/imports": "warn",
-    "simple-import-sort/exports": "warn",
-    "prettier/prettier": "error"
+    "simple-import-sort/exports": "warn"
   }
 }
