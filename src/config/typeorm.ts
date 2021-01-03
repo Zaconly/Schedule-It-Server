@@ -10,7 +10,7 @@ const typeOrmConfig: MysqlConnectionOptions = {
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
   synchronize: !isProd,
-  dropSchema: false,
+  dropSchema: !isProd,
   logging: false,
   entities: ["src/entity/**/*.*"],
   migrations: ["src/migration/**/*.*"],

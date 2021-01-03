@@ -19,12 +19,15 @@
     "dotenv": "^8.2.0",
     "mysql2": "^2.2.5",
     "reflect-metadata": "^0.1.10",
+    "shortid": "^2.2.16",
+    "slugify": "^1.4.6",
     "type-graphql": "^1.1.1",
     "typeorm": "0.2.29"
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.2",
     "@types/node": "^8.0.29",
+    "@types/shortid": "^0.0.29",
     "@typescript-eslint/eslint-plugin": "^4.11.1",
     "@typescript-eslint/parser": "^4.11.1",
     "eslint": "^7.17.0",

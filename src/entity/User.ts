@@ -1,25 +1,15 @@
-import * as bcrypt from "bcryptjs"
-import { IsEmail, Length } from "class-validator"
-import { Field, ID, ObjectType } from "type-graphql"
-import {
-  BaseEntity,
-  BeforeInsert,
-  BeforeUpdate,
-  Column,
-  CreateDateColumn,
-  Entity,
-  PrimaryGeneratedColumn,
-  UpdateDateColumn
-} from "typeorm"
+import bcrypt from "bcryptjs"
+import { IsAlphanumeric, IsEmail, Length } from "class-validator"
+import { Field, ObjectType } from "type-graphql"
+import { BeforeInsert, BeforeUpdate, Column, Entity } from "typeorm"
+
+import { BaseContent } from "../helpers"
 
 @ObjectType()
 @Entity("users")
-export class User extends BaseEntity {
-  @Field(type => ID)
-  @PrimaryGeneratedColumn()
-  id!: number
-
+export class User extends BaseContent {
   @Field()
+  @IsAlphanumeric()
   @Length(3, 30)
   @Column({ length: 30, unique: true })
   username!: string
@@ -39,26 +29,19 @@ export class User extends BaseEntity {
   @Column("boolean", { default: false })
   isConfirmed!: boolean
 
-  @Field()
-  @CreateDateColumn()
-  createdAt!: string
-
-  @Field()
-  @UpdateDateColumn()
-  updatedAt!: string
-
-  hashPassword(password = ""): Promise<string> {
-    return bcrypt.hash(password, 12)
+  async hashPassword(): Promise<string> {
+    const password = await bcrypt.hash(this.password, 12)
+    return password
   }
 
-  comparePassword(password: string, hashedPassword: string): Promise<boolean> {
-    return bcrypt.compare(password, hashedPassword)
+  async comparePassword(password: string): Promise<boolean> {
+    const compare = await bcrypt.compare(password, this.password)
+    return compare
   }
 
   @BeforeInsert()
   @BeforeUpdate()
   async savePassword(): Promise<void> {
-    const hashedPassword = await this.hashPassword(this.password)
-    this.password = hashedPassword
+    this.password = await this.hashPassword()
   }
 }
