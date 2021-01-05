@@ -6,17 +6,29 @@ import { buildSchema } from "type-graphql"
 import { createConnection } from "typeorm"
 
 import typeOrmConfig from "./config/typeorm"
-import { BoardResolver } from "./resolvers/BoardResolver"
-import { UserResolver } from "./resolvers/UserResolver"
+import { User } from "./entity/User"
+import { authChecker } from "./modules/auth"
+import { Context } from "./types/Context"
 
 const bootstrap = async () => {
   try {
     await createConnection(typeOrmConfig)
 
     const schema = await buildSchema({
-      resolvers: [UserResolver, BoardResolver]
+      resolvers: [__dirname + "/resolvers/**/*.ts"],
+      dateScalarMode: "timestamp",
+      authChecker
     })
-    const server = new ApolloServer({ schema })
+
+    const server = new ApolloServer({
+      schema,
+      context: ({ req, res }): Partial<Context> => {
+        return {
+          req,
+          res
+        }
+      }
+    })
 
     const { url } = await server.listen(process.env.PORT || 4000)
     console.info(`🚀 Server is running, GraphQL Playground available at ${url}`)

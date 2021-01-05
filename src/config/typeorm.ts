@@ -1,6 +1,6 @@
 import { MysqlConnectionOptions } from "typeorm/driver/mysql/MysqlConnectionOptions"
 
-import { isProd } from "../helpers"
+import { isProd } from "../utils/helpers"
 
 const typeOrmConfig: MysqlConnectionOptions = {
   type: "mysql",
@@ -10,7 +10,7 @@ const typeOrmConfig: MysqlConnectionOptions = {
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
   synchronize: !isProd,
-  dropSchema: !isProd,
+  // dropSchema: !isProd,
   logging: false,
   entities: ["src/entity/**/*.*"],
   migrations: ["src/migration/**/*.*"],

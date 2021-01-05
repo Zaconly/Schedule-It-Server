@@ -11,9 +11,9 @@ import {
 
 @ObjectType()
 export abstract class BaseContent extends BaseEntity {
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn("uuid")
   @Field(type => ID)
-  id!: number
+  id!: string
 
   @Field()
   @Column({ unique: true })
