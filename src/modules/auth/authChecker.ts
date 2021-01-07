@@ -1,15 +1,17 @@
+import { AuthenticationError } from "apollo-server"
 import { verify } from "jsonwebtoken"
 import { AuthChecker } from "type-graphql"
 
 import { User } from "../../entity/User"
 import { Context } from "../../types/Context"
 import { JwtPayload } from "../../types/me"
+import { AuthorizationError } from "../../utils/ApolloError"
 
 export const authChecker: AuthChecker<Context> = async ({ context }, roles): Promise<boolean> => {
   const authorization = context.req.headers["authorization"]
 
   if (!authorization) {
-    throw new Error(`You must be connected to perform this action`)
+    throw new AuthenticationError(`You must be connected to perform this action`)
   }
 
   const token = authorization.split(" ")[1]
@@ -27,7 +29,7 @@ export const authChecker: AuthChecker<Context> = async ({ context }, roles): Pro
     const matchRoles = payload.roles.filter(userRole => roles.includes(userRole))
 
     if (!matchRoles.length) {
-      throw new Error(`You do not have sufficient permissions: ${roles}`)
+      throw new AuthorizationError(`You do not have sufficient permissions: ${roles}`)
     }
 
     return true

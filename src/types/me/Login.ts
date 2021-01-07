@@ -3,7 +3,7 @@ import { Field, InputType, ObjectType } from "type-graphql"
 import { User } from "../../entity/User"
 
 @InputType()
-export class LoginInput implements Partial<User> {
+export abstract class LoginInput implements Partial<User> {
   @Field()
   identifier!: string
 
@@ -12,10 +12,13 @@ export class LoginInput implements Partial<User> {
 }
 
 @ObjectType()
-export abstract class LoginResponse {
-  @Field(type => User)
-  user!: User
-
+export abstract class TokenResponse {
   @Field()
   token!: string
+}
+
+@ObjectType()
+export abstract class LoginResponse extends TokenResponse {
+  @Field(type => User)
+  user!: User
 }

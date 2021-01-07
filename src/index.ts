@@ -6,13 +6,13 @@ import { buildSchema } from "type-graphql"
 import { createConnection } from "typeorm"
 
 import typeOrmConfig from "./config/typeorm"
-import { User } from "./entity/User"
 import { authChecker } from "./modules/auth"
 import { Context } from "./types/Context"
+import { logger } from "./utils/logger"
 
 const bootstrap = async () => {
   try {
-    await createConnection(typeOrmConfig)
+    const { options } = await createConnection(typeOrmConfig)
 
     const schema = await buildSchema({
       resolvers: [__dirname + "/resolvers/**/*.ts"],
@@ -31,9 +31,10 @@ const bootstrap = async () => {
     })
 
     const { url } = await server.listen(process.env.PORT || 4000)
-    console.info(`🚀 Server is running, GraphQL Playground available at ${url}`)
+    logger.info(`Server is running, GraphQL Playground available at ${url}`)
+    logger.info(`MySQL client connected to database '${options.database}'`)
   } catch (err) {
-    console.error(err)
+    logger.error(err)
   }
 }
 

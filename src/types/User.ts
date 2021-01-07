@@ -4,7 +4,7 @@ import { Field, InputType } from "type-graphql"
 import { User } from "../entity/User"
 
 @InputType()
-export class UserInput implements Partial<User> {
+export abstract class UserInput implements Partial<User> {
   @Field()
   @IsAlphanumeric()
   @Length(3, 30)
